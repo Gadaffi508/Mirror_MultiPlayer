@@ -2,20 +2,20 @@
 Bu repo, Unity'de Mirror kütüphanesini kullanarak gerçekleştirdiğim çeşitli ağ programlama örneklerini içermektedir. Aşağıda projede yer alan başlıca bileşenler ve kod örnekleri bulunmaktadır.
 
 ## 1. İçindekiler
--Kurulum
--Projeler
--Renk Değiştirme
--SyncVar Kullanımı
--Silah Spawn Etme
--Katkıda Bulunma
--Lisans
+- Kurulum
+- Projeler
+- Renk Değiştirme
+- SyncVar Kullanımı
+- Silah Spawn Etme
+- Katkıda Bulunma
+- Lisans
 
 ## 2. Kurulum
 
 Bu projeyi bilgisayarınızda çalıştırmak için aşağıdaki adımları takip edebilirsiniz:
 
--Unity Hub ile Unity'yi kurun (Unity 2020.3 veya daha yeni bir sürüm önerilir).
--Bu repoyu klonlayın:
+- Unity Hub ile Unity'yi kurun (Unity 2020.3 veya daha yeni bir sürüm önerilir).
+- Bu repoyu klonlayın:
 ```
 git clone https://github.com/kullaniciadi/UnityMirrorExamples.git
 ```
@@ -24,7 +24,7 @@ git clone https://github.com/kullaniciadi/UnityMirrorExamples.git
 
 ## 3. Projeler
 
-### -Renk Değiştirme
+### - Renk Değiştirme
 ChangeColor sınıfı, oyuncunun klavyeden C tuşuna bastığında rastgele bir renk seçerek tüm istemcilerde güncellemesini sağlar.
 
 ```
@@ -76,7 +76,7 @@ public class ChangeColor : NetworkBehaviour
 
 ```
 
-### -SyncVar Kullanımı
+### - SyncVar Kullanımı
 SyncVarDemo sınıfı, sunucu tarafında belirli aralıklarla rastgele renkler oluşturur ve bu renkleri istemcilerde senkronize eder.
 
 ```
@@ -114,7 +114,7 @@ public class SyncVarDemo : NetworkBehaviour
 
 ```
 
-### -Silah Spawn Etme
+### - Silah Spawn Etme
 WeaponSpawner sınıfı, oyuncu S tuşuna bastığında bir silah oluşturur ve bu silahın konumunu oyuncunun konumuna göre günceller.
 ```
 using UnityEngine;

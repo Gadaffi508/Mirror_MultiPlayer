@@ -60,16 +60,14 @@ namespace Mirror
 
         public void HandleReadyToStart(bool ısReady)
         {
+            if(!İsLeader) return;
+
+            startGameButton.interactable = ısReady;
         }
 
         public void HandleDisplayNameChanged(string oldValue, string newValue) => UpdateDisplay();
 
         public void HandleReadyStatusChanged(bool oldValue, bool newValue) => UpdateDisplay();
-
-        [Command]
-        void CmdSetDisplayName(string name)
-        {
-        }
 
         void UpdateDisplay()
         {
@@ -100,6 +98,30 @@ namespace Mirror
                     ? "<color = green> Ready </color>"
                     : "<color = red> UnReady </color>";
             }
+        }
+        
+        //<--------------------------------------------------Commands-------------------------------------------------->
+
+        [Command]
+        void CmdSetDisplayName(string name)
+        {
+            DisplayName = name;
+        }
+
+        [Command]
+        public void CmdReadyUp()
+        {
+            IsReady = !IsReady;
+            
+            Room.NotifyPlayersOfReadyState();
+        }
+
+        [Command]
+        public void CmdStartGame()
+        {
+            if(Room.roomPlayers[0].connectionToClient != connectionToClient) return;
+            
+            Room.StartGame();
         }
     }
 }

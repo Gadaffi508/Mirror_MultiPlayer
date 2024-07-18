@@ -10,13 +10,17 @@ namespace Mirror
     {
         public int minPlayers = 2;
         [Scene] public string menuScene = string.Empty;
+        [Scene] public string gameScene = string.Empty;
 
         [Header("Room")] public NetworkRoomPlayerLobby roomPlayerPrefab = null;
 
         public static event Action onClientConnected;
         public static event Action onClientDisconnected;
 
+        [Header("Game")] public NetworkGamePlayerLobby gamePlayerLobby;
+
         public List<NetworkRoomPlayerLobby> roomPlayers { get; } = new List<NetworkRoomPlayerLobby>();
+        public List<NetworkGamePlayerLobby> gamePlayers { get; } = new List<NetworkGamePlayerLobby>();
 
         public override void OnStartServer() => spawnPrefabs = Resources.LoadAll<GameObject>("Player").ToList();
 
@@ -86,9 +90,38 @@ namespace Mirror
             base.OnServerDisconnect(conn);
         }
 
+        public override void ServerChangeScene(string newSceneName)
+        {
+            if (SceneManager.GetActiveScene().name == menuScene && newSceneName.StartsWith(gameScene))
+            {
+                for (int i = roomPlayers.Count - 1; i >= 0; i--)
+                {
+                    var conn = roomPlayers[i].connectionToClient;
+                    var gamePlayerInstance = Instantiate(gamePlayerLobby);
+                    gamePlayerInstance.SetDisplayName(roomPlayers[i].DisplayName);
+                    
+                    NetworkServer.Destroy(conn.identity.gameObject);
+
+                    NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance.gameObject);
+                }
+            }
+            
+            base.ServerChangeScene(newSceneName);
+        }
+
         public override void OnStopServer()
         {
             roomPlayers.Clear();
+        }
+
+        public void StartGame()
+        {
+            if (SceneManager.GetActiveScene().name == menuScene)
+            {
+                if(!IsReadyToStart()) return;
+                
+                ServerChangeScene(gameScene);
+            }
         }
 
         public void NotifyPlayersOfReadyState()

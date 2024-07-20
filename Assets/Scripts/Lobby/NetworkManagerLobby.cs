@@ -14,10 +14,12 @@ namespace Mirror
 
         [Header("Room")] public NetworkRoomPlayerLobby roomPlayerPrefab = null;
 
-        public static event Action onClientConnected;
-        public static event Action onClientDisconnected;
+        public static event Action OnClientConnected;
+        public static event Action OnClientDisconnected;
+        public static event Action<NetworkConnection> OnServerReadied; 
 
         [Header("Game")] public NetworkGamePlayerLobby gamePlayerLobby;
+        public GameObject playerSpawnSystem = null;
 
         public List<NetworkRoomPlayerLobby> roomPlayers { get; } = new List<NetworkRoomPlayerLobby>();
         public List<NetworkGamePlayerLobby> gamePlayers { get; } = new List<NetworkGamePlayerLobby>();
@@ -38,14 +40,14 @@ namespace Mirror
         {
             base.OnClientConnect();
             
-            onClientConnected?.Invoke();
+            OnClientConnected?.Invoke();
         }
 
         public override void OnClientDisconnect()
         {
             base.OnClientDisconnect();
             
-            onClientDisconnected?.Invoke();
+            OnClientDisconnected?.Invoke();
         }
 
         public override void OnServerConnect(NetworkConnectionToClient conn)
@@ -107,6 +109,22 @@ namespace Mirror
             }
             
             base.ServerChangeScene(newSceneName);
+        }
+
+        public override void OnServerChangeScene(string newSceneName)
+        {
+            if (newSceneName.StartsWith(gameScene))
+            {
+                GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
+                NetworkServer.Spawn(playerSpawnSystemInstance);
+            }
+        }
+
+        public override void OnServerReady(NetworkConnectionToClient conn)
+        {
+            base.OnServerReady(conn);
+            
+            OnServerReadied?.Invoke(conn);
         }
 
         public override void OnStopServer()

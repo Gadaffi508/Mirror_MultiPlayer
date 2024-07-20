@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror.Rounds;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,6 +10,8 @@ namespace Mirror
     public class NetworkManagerWIT : NetworkManager
     {
         [SerializeField] private int minPlayers = 2;
+        public int numberOfRounds = 2;
+        public MapSet mapSet = null;
         [Scene] [SerializeField] private string menuScene = string.Empty;
 
         [Header("Room")] [SerializeField] private NetworkRoomPlayerWIT roomPlayerPrefab = null;
@@ -21,8 +24,12 @@ namespace Mirror
         public static event Action OnClientDisconnected;
         public static event Action<NetworkConnection> OnServerReadied;
 
+        private const string mapPrefix = "SampleScene";
+
         public List<NetworkRoomPlayerWIT> RoomPlayers { get; } = new List<NetworkRoomPlayerWIT>();
         public List<NetworkGamePlayerWIT> GamePlayers { get; } = new List<NetworkGamePlayerWIT>();
+
+        private MapHandler mapHandler;
 
         public override void OnStartServer() => spawnPrefabs = Resources.LoadAll<GameObject>("Player").ToList();
 
@@ -120,8 +127,21 @@ namespace Mirror
             if (SceneManager.GetActiveScene().name == menuScene)
             {
                 if(!IsReadyToStart()) return;
-                ServerChangeScene("Game");
+                mapHandler = new MapHandler(mapSet, numberOfRounds);
+                ServerChangeScene(mapHandler.NextMap);
             }
+        }
+
+        public void GoToNextMap()
+        {
+            if (mapHandler.IsComplete)
+            {
+                StopHost();
+                
+                return;
+            }
+            
+            ServerChangeScene(mapHandler.NextMap);
         }
 
         public void NotifyPlayersOfReadyState()

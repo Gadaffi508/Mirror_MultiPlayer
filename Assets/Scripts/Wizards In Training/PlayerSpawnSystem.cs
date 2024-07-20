@@ -27,11 +27,11 @@ namespace Mirror
             //Input Managers
         }
 
-        public override void OnStartServer() => NetworkManagerWIT.OnServerReadied += SpawnPlay;
+        public override void OnStartServer() => NetworkManagerLobby.OnServerReadied += SpawnPlayer;
 
 
         [Server]
-        public void SpawnPlay(NetworkConnection conn)
+        public void SpawnPlayer(NetworkConnection conn)
         {
             Transform spawnPoint = _spawnPoints.ElementAtOrDefault(nextIndex);
             
@@ -45,11 +45,12 @@ namespace Mirror
             nextIndex++;
         }
 
+        [ServerCallback]
         private void OnDestroy()
         {
             if(!isServer) return;
             
-            NetworkManagerWIT.OnServerReadied -= SpawnPlay;
+            NetworkManagerLobby.OnServerReadied -= SpawnPlayer;
         }
     }
 }

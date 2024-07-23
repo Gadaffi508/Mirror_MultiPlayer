@@ -218,7 +218,7 @@ MonoBehaviour:
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
-  playerPrefab: {fileID: 0}
+  playerPrefab: {fileID: 5735446653820774323, guid: 294ca766eeba5cb41bc7e7a159fd6a4c, type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs: []
@@ -238,6 +238,8 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   minPlayers: 2
+  numberOfRounds: 2
+  mapSet: {fileID: 0}
   menuScene: Assets/Scenes/SampleScene.unity
   roomPlayerPrefab: {fileID: 6427186929482911342, guid: 446ce9202673b9a49bfe2c1b82a2691a, type: 3}
   gamePlayerPrefab: {fileID: 0}

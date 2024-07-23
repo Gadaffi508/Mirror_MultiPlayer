@@ -21,7 +21,7 @@ namespace Mirror
 
         void HandleHealthChanged(int currentHealth, int maxHealth)
         {
-            
+            healthBarImage.fillAmount = (float)currentHealth / maxHealth;
         }
     }
 }
